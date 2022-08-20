@@ -1,5 +1,6 @@
 import pygame
 from sys import exit
+from random import randint
 
 
 def display_score():
@@ -8,6 +9,16 @@ def display_score():
     score_rect = score_surface.get_rect(center=(400, 50))
     screen.blit(score_surface, score_rect)
     return current_time
+
+
+def obstacle_movement(obstacle_list):
+    if obstacle_list:
+        for obstacle_rect in obstacle_list:
+            obstacle_rect.x -= 4
+            screen.blit(snail_surface, obstacle_rect)
+        return obstacle_list
+    else:
+        return []
 
 
 pygame.init()
@@ -30,8 +41,11 @@ title_rect = title_surface.get_rect(center=(400, 75))
 instructions_surface = test_font.render("Press space bar to play", False, "#EEEEEE")
 instructions_rect = instructions_surface.get_rect(center=(400, 330))
 
+# Obstacles
 snail_surface = pygame.image.load("graphics/snail/snail1.png").convert_alpha()
 snail_rect = snail_surface.get_rect(midbottom=(800, 300))
+
+obstacle_rect_list = []
 
 player_surface = pygame.image.load("graphics/player/player_walk_1.png").convert_alpha()
 player_rect = player_surface.get_rect(midbottom=(80, 300))
@@ -39,6 +53,10 @@ player_gravity = 0
 player_stand = pygame.image.load("graphics/player/player_stand.png").convert_alpha()
 player_stand = pygame.transform.rotozoom(player_stand, 0, 2)
 player_stand_rect = player_stand.get_rect(center=(400, 200))
+
+# Timer
+obstacle_timer = pygame.USEREVENT + 1
+pygame.time.set_timer(obstacle_timer, 1500)
 
 while True:
     for event in pygame.event.get():
@@ -53,6 +71,8 @@ while True:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and player_rect.bottom == 300:
                     player_gravity = -22
+            if event.type == obstacle_timer:
+                obstacle_rect_list.append(snail_surface.get_rect(midbottom=(randint(900, 1100), 300)))
         else:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 game_active = True
@@ -65,22 +85,15 @@ while True:
         screen.blit(ground_surface, (0, 300))
         score = display_score()
 
-        # pygame.draw.rect(screen, box_color, score_rect, 8, 10)
-        # pygame.draw.rect(screen, box_color, score_rect, 12, 10)
-        # screen.blit(score_surface, score_rect)
-
-        # Snail
-        screen.blit(snail_surface, snail_rect)
-        snail_rect.x -= 4
-        if snail_rect.right <= 0:
-            snail_rect.x = 800
-
         # Player
         player_gravity += 1
         player_rect.y += player_gravity
         if player_rect.bottom >= 300:
             player_rect.bottom = 300
         screen.blit(player_surface, player_rect)
+
+        # Obstacle movement
+        obstacle_rect_list = obstacle_movement(obstacle_rect_list)
 
         # Collision
         if snail_rect.colliderect(player_rect):
