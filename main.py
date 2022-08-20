@@ -21,17 +21,21 @@ snail_rect = snail_surface.get_rect(midbottom=(800, 300))
 
 player_surface = pygame.image.load("graphics/player/player_walk_1.png").convert_alpha()
 player_rect = player_surface.get_rect(midbottom=(80, 300))
+player_gravity = 0
 
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
-        if event.type == pygame.MOUSEMOTION:
+        if event.type == pygame.MOUSEBUTTONDOWN:
             if player_rect.collidepoint(event.pos):
-                print("Aouch")
+                player_gravity = -20
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                player_gravity = -20
 
-    # place sky, ground and text
+    # Background
     screen.blit(sky_surface, (0, 0))
     screen.blit(ground_surface, (0, 300))
 
@@ -39,13 +43,15 @@ while True:
     pygame.draw.rect(screen, box_color, score_rect, 12, 10)
     screen.blit(score_surface, score_rect)
 
-    # place the snail and move it
+    # Snail
     screen.blit(snail_surface, snail_rect)
     snail_rect.x -= 4
     if snail_rect.right <= 0:
         snail_rect.x = 800
 
-    # place the player and move it
+    # Player
+    player_gravity += 1
+    player_rect.y += player_gravity
     screen.blit(player_surface, player_rect)
 
     pygame.display.update()
