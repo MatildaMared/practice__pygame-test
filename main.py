@@ -9,7 +9,8 @@ test_font = pygame.font.Font("font/Pixeltype.ttf", 48)
 
 sky_surface = pygame.image.load("graphics/Sky.png").convert()
 ground_surface = pygame.image.load("graphics/ground.png").convert()
-text_surface = test_font.render("Hello World", False, "Black")
+text_surface = test_font.render("The most awesome game!", False, "Black")
+text_rect = text_surface.get_rect(midbottom=(400, 100))
 
 snail_surface = pygame.image.load("graphics/snail/snail1.png").convert_alpha()
 snail_rect = snail_surface.get_rect(midbottom=(800, 300))
@@ -22,11 +23,14 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
+        if event.type == pygame.MOUSEMOTION:
+            if player_rect.collidepoint(event.pos):
+                print("Aouch")
 
     # place sky, ground and text
     screen.blit(sky_surface, (0, 0))
     screen.blit(ground_surface, (0, 300))
-    screen.blit(text_surface, (300, 50))
+    screen.blit(text_surface, text_rect)
 
     # place the snail and move it
     screen.blit(snail_surface, snail_rect)
@@ -35,7 +39,6 @@ while True:
         snail_rect.x = 800
 
     # place the player and move it
-    player_rect.left += 1
     screen.blit(player_surface, player_rect)
 
     pygame.display.update()
