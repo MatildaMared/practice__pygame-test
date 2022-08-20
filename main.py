@@ -7,10 +7,14 @@ pygame.display.set_caption("Runner")
 clock = pygame.time.Clock()
 test_font = pygame.font.Font("font/Pixeltype.ttf", 48)
 
+text_color = (64, 64, 64)
+box_color = "#c0e8ec"
+
 sky_surface = pygame.image.load("graphics/Sky.png").convert()
 ground_surface = pygame.image.load("graphics/ground.png").convert()
-text_surface = test_font.render("The most awesome game!", False, "Black")
-text_rect = text_surface.get_rect(midbottom=(400, 100))
+
+score_surface = test_font.render("The most awesome game!", False, text_color)
+score_rect = score_surface.get_rect(center=(400, 100))
 
 snail_surface = pygame.image.load("graphics/snail/snail1.png").convert_alpha()
 snail_rect = snail_surface.get_rect(midbottom=(800, 300))
@@ -30,7 +34,10 @@ while True:
     # place sky, ground and text
     screen.blit(sky_surface, (0, 0))
     screen.blit(ground_surface, (0, 300))
-    screen.blit(text_surface, text_rect)
+
+    pygame.draw.rect(screen, box_color, score_rect, 8, 10)
+    pygame.draw.rect(screen, box_color, score_rect, 12, 10)
+    screen.blit(score_surface, score_rect)
 
     # place the snail and move it
     screen.blit(snail_surface, snail_rect)
