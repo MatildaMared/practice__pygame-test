@@ -15,7 +15,11 @@ def obstacle_movement(obstacle_list):
     if obstacle_list:
         for obstacle_rect in obstacle_list:
             obstacle_rect.x -= 4
-            screen.blit(snail_surface, obstacle_rect)
+
+            if obstacle_rect.bottom == 300:
+                screen.blit(snail_surface, obstacle_rect)
+            else:
+                screen.blit(fly_surface, obstacle_rect)
 
         obstacle_list = [obstacle for obstacle in obstacle_list if obstacle.x > -100]
         return obstacle_list
@@ -45,7 +49,7 @@ instructions_rect = instructions_surface.get_rect(center=(400, 330))
 
 # Obstacles
 snail_surface = pygame.image.load("graphics/snail/snail1.png").convert_alpha()
-snail_rect = snail_surface.get_rect(midbottom=(800, 300))
+fly_surface = pygame.image.load("graphics/fly/fly1.png").convert_alpha()
 
 obstacle_rect_list = []
 
@@ -74,11 +78,15 @@ while True:
                 if event.key == pygame.K_SPACE and player_rect.bottom == 300:
                     player_gravity = -22
             if event.type == obstacle_timer:
-                obstacle_rect_list.append(snail_surface.get_rect(midbottom=(randint(900, 1100), 300)))
+                # Spawn a fly OR a snail randomly
+                if randint(0, 2):
+                    obstacle_rect_list.append(snail_surface.get_rect(midbottom=(randint(900, 1100), 300)))
+                else:
+                    obstacle_rect_list.append(fly_surface.get_rect(midbottom=(randint(900, 1100), 200)))
+
         else:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 game_active = True
-                snail_rect.left = 800
                 start_time = pygame.time.get_ticks()
 
     if game_active:
@@ -98,8 +106,8 @@ while True:
         obstacle_rect_list = obstacle_movement(obstacle_rect_list)
 
         # Collision
-        if snail_rect.colliderect(player_rect):
-            game_active = False
+        # if snail_rect.colliderect(player_rect):
+        #     game_active = False
     else:
         screen.fill((94, 129, 162))
         screen.blit(player_stand, player_stand_rect)
