@@ -22,10 +22,10 @@ start_time = 0
 sky_surface = pygame.image.load("graphics/Sky.png").convert()
 ground_surface = pygame.image.load("graphics/ground.png").convert()
 
-title_surface = test_font.render("Robo Runner", False, "#FFFFFF")
+title_surface = test_font.render("Robo Runner", False, "#EEEEEE")
 title_rect = title_surface.get_rect(center=(400, 75))
 
-instructions_surface = test_font.render("Press space bar to play", False, "#FFFFFF")
+instructions_surface = test_font.render("Press space bar to play", False, "#EEEEEE")
 instructions_rect = instructions_surface.get_rect(center=(400, 330))
 
 snail_surface = pygame.image.load("graphics/snail/snail1.png").convert_alpha()
