@@ -27,6 +27,14 @@ def obstacle_movement(obstacle_list):
         return []
 
 
+def collisions(player, obstacles):
+    if obstacles:
+        for obstacle_rect in obstacles:
+            if player.colliderect(obstacle_rect):
+                return False
+    return True
+
+
 pygame.init()
 screen = pygame.display.set_mode((800, 400))
 pygame.display.set_caption("Runner")
@@ -82,7 +90,7 @@ while True:
                 if randint(0, 2):
                     obstacle_rect_list.append(snail_surface.get_rect(midbottom=(randint(900, 1100), 300)))
                 else:
-                    obstacle_rect_list.append(fly_surface.get_rect(midbottom=(randint(900, 1100), 200)))
+                    obstacle_rect_list.append(fly_surface.get_rect(midbottom=(randint(950, 1100), 200)))
 
         else:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
@@ -106,11 +114,14 @@ while True:
         obstacle_rect_list = obstacle_movement(obstacle_rect_list)
 
         # Collision
-        # if snail_rect.colliderect(player_rect):
-        #     game_active = False
+        game_active = collisions(player_rect, obstacle_rect_list)
+
     else:
         screen.fill((94, 129, 162))
         screen.blit(player_stand, player_stand_rect)
+        obstacle_rect_list.clear()
+        player_rect.midbottom = (80, 300)
+        player_gravity = 0
 
         if score > 0:
             score_message_surface = test_font.render(f"Game over! Score: {score}", False, "#EEEEEE")
