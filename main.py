@@ -7,6 +7,7 @@ def display_score():
     score_surface = test_font.render(f"Score: {current_time}", False, text_color)
     score_rect = score_surface.get_rect(center=(400, 50))
     screen.blit(score_surface, score_rect)
+    return current_time
 
 
 pygame.init()
@@ -18,6 +19,7 @@ game_active = False
 text_color = (64, 64, 64)
 box_color = "#c0e8ec"
 start_time = 0
+score = 0
 
 sky_surface = pygame.image.load("graphics/Sky.png").convert()
 ground_surface = pygame.image.load("graphics/ground.png").convert()
@@ -61,7 +63,7 @@ while True:
         # Background
         screen.blit(sky_surface, (0, 0))
         screen.blit(ground_surface, (0, 300))
-        display_score()
+        score = display_score()
 
         # pygame.draw.rect(screen, box_color, score_rect, 8, 10)
         # pygame.draw.rect(screen, box_color, score_rect, 12, 10)
@@ -86,8 +88,15 @@ while True:
     else:
         screen.fill((94, 129, 162))
         screen.blit(player_stand, player_stand_rect)
+
+        if score > 0:
+            score_message_surface = test_font.render(f"Game over! Score: {score}", False, "#EEEEEE")
+            score_message_rect = score_message_surface.get_rect(center=(400, 330))
+            screen.blit(score_message_surface, score_message_rect)
+        else:
+            screen.blit(instructions_surface, instructions_rect)
+
         screen.blit(title_surface, title_rect)
-        screen.blit(instructions_surface, instructions_rect)
 
     pygame.display.update()
     clock.tick(60)
