@@ -15,6 +15,7 @@ snail_surface = pygame.image.load("graphics/snail/snail1.png").convert_alpha()
 snail_x_pos = 600
 
 player_surface = pygame.image.load("graphics/player/player_walk_1.png").convert_alpha()
+player_rect = player_surface.get_rect(midbottom=(80, 300))
 
 while True:
     for event in pygame.event.get():
@@ -29,7 +30,7 @@ while True:
     if snail_x_pos < -50:
         snail_x_pos = 800
     screen.blit(snail_surface, (snail_x_pos, 250))
-    screen.blit(player_surface, (80, 200))
+    screen.blit(player_surface, player_rect)
 
     pygame.display.update()
     clock.tick(60)
